@@ -39,6 +39,13 @@ const Cart = (props) => {
     </ul>
   );
 
+  const submitOrderHandler = (userData) => {
+    fetch("https://react-http-87980-default-rtdb.firebaseio.com/orders.json", {
+      method: "POST",
+      body: JSON.stringify({ user: userData, orderedItems: cartCtx.items }),
+    });
+  };
+
   const modalActions = (
     <div className={styles.actions}>
       <button className={styles["button--alt"]} onClick={props.onHideCart}>
@@ -59,7 +66,9 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckOut && <Checkout onCancel={props.onHideCart} />}
+      {isCheckOut && (
+        <Checkout onCancel={props.onHideCart} onConfirm={submitOrderHandler} />
+      )}
       {!isCheckOut && modalActions}
     </Modal>
   );
